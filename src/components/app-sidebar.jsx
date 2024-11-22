@@ -24,7 +24,7 @@ const items = [
     },
     {
         title: "การตั้งค่า",
-        url: "/settings",
+        url: "#",
         icon: Settings,
     },
 ]

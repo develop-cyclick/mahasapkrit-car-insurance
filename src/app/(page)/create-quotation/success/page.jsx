@@ -5,8 +5,9 @@ const ResultPage = async ({ searchParams }) => {
     const quotation = JSON.parse(searchParams.data);
     const customer = JSON.parse(searchParams.customer)
     const insuranceFund = searchParams.insuranceFund;
-    const discountAmount = searchParams.discountAmount;
-    const discountPercent = searchParams.discountPercent;
+    const discountAmount = searchParams.discountAmount || 0;
+    const discountPercent = searchParams.discountPercent || 0;
+
 
     const formatCurrency = (amount) => {
         return new Intl.NumberFormat('th-TH', {
@@ -70,8 +71,9 @@ const ResultPage = async ({ searchParams }) => {
                     <div className="flex flex-col gap-2 divide-y-[1px] divide-indigo-300">
                         <p className="text-base px-4 py-1">{'ค่าเบี้ยประกันภัย (บาท)'}</p>
                         <p className="text-base px-4 py-1">{'ค่าเบี้ยประกันภัย (บาท) พรบ.'}</p>
-                        <p className="text-base px-4 py-2 font-semibold bg-gray-200">{'ยอดรวมค่าเบี้ยประกันภัย (บาท) '}</p>
+                        <p className="text-base px-4 py-2 font-semibold bg-gray-200">{'ยอดรวมค่าเบี้ยประกันภัย (บาท) + vat 7%'}</p>
                         <p className="text-base px-4 py-2 font-semibold bg-gray-200">{`ส่วนลด ${discountPercent}%`}</p>
+                        {discountAmount && <p className="text-base px-4 py-2 font-semibold bg-gray-200">{`ส่วนลดเพิ่มเติม ${formatCurrency(parseInt(discountAmount))}`}</p>}
                         <p className="text-base px-4 py-2 font-semibold bg-gray-200">{'ยอดรวมค่าเบี้ยประกันภัย (บาท) หลังหักส่วนลด'}</p>
                     </div>
 
@@ -82,9 +84,9 @@ const ResultPage = async ({ searchParams }) => {
                             q.insurance_premium_type !== 'ซ่อมอู่'
                         ).slice(0, 3).map((q, index) => {
 
-                            const netInsuranceFund = q.fund_regis_bkk + 645.21 + (q.fund_regis_bkk * (7 / 100));
-                            const discountAmount = netInsuranceFund * (discountPercent / 100);
-                            const netInsuranceFundAfterDiscount = netInsuranceFund - discountAmount;
+                            const netInsuranceFund = q.fund_regis_bkk + 645.21 + ((q.fund_regis_bkk + 645.21) * (7 / 100));
+                            const percentDiscount = netInsuranceFund * (discountPercent / 100);
+                            const netInsuranceFundAfterDiscount = netInsuranceFund - percentDiscount - discountAmount;
 
 
                             return (
@@ -114,8 +116,10 @@ const ResultPage = async ({ searchParams }) => {
                                     <div className="flex flex-col gap-2 divide-y-[1px] divide-indigo-300 text-end">
                                         <p className="text-base py-1 px-2">{`${formatCurrency(parseInt(q.fund_regis_bkk))}`}</p>
                                         <p className="text-base py-1 px-2">{`${formatCurrency(645.21)}`}</p>
-                                        <p className="text-base py-2 font-semibold px-2 bg-gray-200">{`${formatCurrency(parseInt(netInsuranceFund) + 645.21)}`}</p>
-                                        <p className="text-base py-2 font-semibold px-2 bg-gray-200">{`${formatCurrency(parseInt(discountAmount))}`}</p>
+                                        <p className="text-base py-2 font-semibold px-2 bg-gray-200">{`${formatCurrency(parseInt(netInsuranceFund))}`}</p>
+                                        <p className="text-base py-2 font-semibold px-2 bg-gray-200">{`${formatCurrency(parseInt(percentDiscount))}`}</p>
+                                        {discountPercent && <p className="text-base py-2 font-semibold px-2 bg-gray-200">{`${formatCurrency(parseInt(discountAmount))}`}</p>}
+
                                         <p className="text-base py-2 font-semibold px-2 bg-gray-200">{`${formatCurrency(parseInt(netInsuranceFundAfterDiscount))}`}</p>
                                     </div>
                                 </div>

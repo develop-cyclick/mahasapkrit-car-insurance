@@ -127,16 +127,16 @@ export default async function CreateQuotationPage(props) {
                                     <div className="flex gap-2">
                                         <input
                                             type="text"
-                                            id="discountAmount"
-                                            name="discountAmount"
-                                            placeholder="ระบุส่วนลด (บาท)"
+                                            id="discountPercent"
+                                            name="discountPercent"
+                                            placeholder="ระบุเปอร์เซ็นต์ (%)"
                                             className="w-full p-2 border rounded-md placeholder:px-2"
                                         />
                                         <input
                                             type="text"
-                                            id="discountPercent"
-                                            name="discountPercent"
-                                            placeholder="ระบุส่วนลด (%)"
+                                            id="discountAmount"
+                                            name="discountAmount"
+                                            placeholder="ระบุจำนวน (บาท)"
                                             className="w-full p-2 border rounded-md placeholder:px-2"
                                         />
                                     </div>
@@ -144,7 +144,7 @@ export default async function CreateQuotationPage(props) {
                             </div>
                         </div>
                         <div className="flex space-y-4">
-                            <Button type="submit" className="w-1/2 p-6">สร้างใบเสนอราคา</Button>
+                            <Button type="submit" className="w-full p-6">สร้างใบเสนอราคา</Button>
                         </div>
                     </div>
                 </div>
